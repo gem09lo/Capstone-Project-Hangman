@@ -12,9 +12,10 @@ def user_guess():
 def check_guess(current_guess, word):
     correct_letters = []
     for i in current_guess:
-        for j in word:
-            if i == j and i not in correct_letters:
-                correct_letters.append(i)
+        if i not in correct_letters:
+            for j in word:
+                if i == j:
+                    correct_letters.append(i)
     print ("Correct letters: {}".format(correct_letters))
 
 
