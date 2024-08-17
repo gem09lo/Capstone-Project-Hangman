@@ -13,7 +13,7 @@ def check_guess(current_guess, word):
     correct_letters = []
     for i in current_guess:
         for j in word:
-            if i == j:
+            if i == j and i not in correct_letters:
                 correct_letters.append(i)
     print ("Correct letters: {}".format(correct_letters))
 
