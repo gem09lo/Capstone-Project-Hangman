@@ -1,20 +1,21 @@
+import random
 
 
 def secret_word():
-    return "HANGMAN"
+    word_list = []
+    with open('christmas_theme_words.txt') as f:
+        file_data = f.read()
+        for word in file_data:
+            word_list.append(word.upper())
+        word_list = "".join(word_list).split()
+    return random.choice(word_list)
 
 
-answer = secret_word()
-
-
-def start_hidden_answer():
+def start_hidden_answer(answer):
     hidden_answer_blanks = []
     for i in range(len(answer)):
         hidden_answer_blanks.append("_")
     return (hidden_answer_blanks)
-
-
-starting_blanks = start_hidden_answer()
 
 # After create function to store all used letters: validate by checking if user has used the letter already
 
@@ -31,30 +32,38 @@ def user_input():
             return guess
 
 
-guess = user_input()
-#
+def main():
+    # initial set-up
+    answer = secret_word()
+    starting_blanks = start_hidden_answer(answer)
+    letters_used = set()
+    print(f"Welcome to a game of hangman! \nGuess this word: {
+          starting_blanks} \n")
 
-letters_used = []
+    # main
+    lives = 3
+    while lives > 0:
+        guess = user_input()
+        letters_used.add(guess)
+
+        if guess not in answer:
+            lives -= 1
+            print(f"Wrong letter try again! You have {lives} lives left")
+        else:
+            for i, letter in enumerate(answer):
+                if letter == guess:
+                    starting_blanks[i] = answer[i]
+            print(f"You\'ve got a letter! You still have {lives} lives left")
+        print(f"Letters used: {letters_used} \nStarting blanks: {
+              starting_blanks} \n")
+
+        if starting_blanks == list(answer):
+            print(f"You won! The word was {answer}")
+            break
+
+    # End game
+    if starting_blanks != list(answer):
+        print(f"Game over - The word was {answer}")
 
 
-def store_guesses():
-    letter_used = letters_used.append(guess)
-    return (letters_used)
-
-
-letters_used = store_guesses()
-print(letters_used)
-# Now find a way to loop if the letter occurs twice in the answer
-
-
-def replace_blank():
-    answer_letter_index = answer.find(guess)
-    starting_blanks[answer_letter_index] = guess
-    return (starting_blanks)
-
-
-correct_letter = replace_blank()
-print(correct_letter)
-
-
-# FUNCTION FOR LIMITED ATTEMPTS AND TRY AGAIN IF ANSWER NOT CORRECT AND GAME OVER
+main()
